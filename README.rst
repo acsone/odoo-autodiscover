@@ -1,4 +1,9 @@
-Odoo Autodiscover
+.. image:: https://img.shields.io/badge/licence-LGPL--3-blue.svg
+   :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
+   :alt: License: LGPL-3
+
+=================
+odoo-autodiscover
 =================
 
 Odoo server startup scripts that discover Odoo addons
@@ -31,7 +36,8 @@ How to use
 ----------
 
 * create or install odoo addons in the ``odoo_addons`` namespace package
-  possibly with the help of the ``setuptools-odoo`` package
+  possibly with the help of the `setuptools-odoo
+  <https://github.com/acsone/setuptools-odoo>`_ package
 * run odoo with ``openerp-server-autodiscover`` or ``odoo-autodiscover.py``
   and notice the addons path is constructued automatically
 
