@@ -18,8 +18,8 @@ The following scripts are provided by this package:
 * ``openerp-server-autodiscover`` is the equivalent of ``openerp-server``
 * ``odoo-server-autodiscover`` is an alias for ``openerp-server-autodiscover``
 
-These scripts have exactly the same behaviour and options than
-their standard Odoo counterpart, except the look for addons
+These scripts have exactly the same behaviour and options as
+their standard Odoo counterpart, except they look for addons
 by examining all distributions providing the ``odoo_addons`` namespace
 package.
 
