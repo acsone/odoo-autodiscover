@@ -1,10 +1,9 @@
+odoo-autodiscover
+=================
+
 .. image:: https://img.shields.io/badge/licence-LGPL--3-blue.svg
    :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
    :alt: License: LGPL-3
-
-=================
-odoo-autodiscover
-=================
 
 Odoo server startup scripts that discover Odoo addons
 automatically without the need of the ``--addons-path`` option.
@@ -30,7 +29,7 @@ Odoo counterparts, except they look for additional addons by examining all
 distributions providing the ``odoo_addons`` namespace package.
 
 How to install
---------------
+~~~~~~~~~~~~~~
 
 * create a virtualenv and make sure you have a recent version of pip
   (by running ``pip install -U pip`` or using
@@ -42,7 +41,7 @@ How to install
 * install this package (``pip install odoo-autodiscover``)
 
 How to use
-----------
+~~~~~~~~~~
 
 * create or install odoo addons in the ``odoo_addons`` namespace package
   possibly with the help of the `setuptools-odoo
@@ -51,7 +50,7 @@ How to use
   and notice the addons path is constructued automatically
 
 Complete example
-----------------
+~~~~~~~~~~~~~~~~
 
 The following commands install Odoo 8.0 nightly, then
 install ``base_import_async`` pulling all required dependencies
@@ -74,7 +73,7 @@ automatically (ie ``connector``).
 
 
 Technical note
---------------
+~~~~~~~~~~~~~~
 
 Since it's not possible to make ``openerp.addons`` a namespace package
 (because ``openerp/__init__.py`` contains code), we use a pseudo-package named
@@ -90,15 +89,16 @@ See https://github.com/odoo/odoo/pull/8758 to follow progress with making
 openerp.addons a namespace package, which will hopefully make this package
 obsolete in the future.
 
-Links
------
+Useful links
+~~~~~~~~~~~~
 
+* pypi page: https://pypi.python.org/pypi/odoo-autodiscover
 * code repository: https://github.com/acsone/odoo-autodiscover
 * report issues at: https://github.com/acsone/odoo-autodiscover/issues
 * see also setuptools-odoo: https://github.com/acsone/setuptools-odoo
 
 Credits
--------
+~~~~~~~
 
 Author:
 
@@ -107,3 +107,4 @@ Author:
 Many thanks to Daniel Reis who cleared the path, and Laurent Mignon who convinced
 me it was possible to do it using standard Python setup tools and had the idea of
 the odoo_addons namespace package.
+
