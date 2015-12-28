@@ -4,6 +4,8 @@ odoo-autodiscover
 .. image:: https://img.shields.io/badge/licence-LGPL--3-blue.svg
    :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
    :alt: License: LGPL-3
+.. image:: https://badge.fury.io/py/odoo-autodiscover.svg
+    :target: https://badge.fury.io/py/odoo-autodiscover
 
 Odoo server startup scripts that discover Odoo addons
 automatically without the need of the ``--addons-path`` option.
