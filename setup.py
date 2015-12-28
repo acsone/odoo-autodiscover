@@ -7,11 +7,11 @@ import setuptools
 
 setuptools.setup(
     name='odoo-autodiscover',
-    version='0.5.0',
+    version='1.0.0',
     description='An Odoo launcher that discovers addons automatically',
     long_description=open('README.rst').read(),
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Framework :: Odoo',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: '
@@ -27,9 +27,11 @@ setuptools.setup(
         'odoo_autodiscover',
     ],
     install_requires=[
-        'odoo>=8',
+        'odoo>=8.0a',
     ],
-    scripts=['odoo-autodiscover.py'],
+    scripts=[
+         'odoo-autodiscover.py'
+    ],
     entry_points={
         'console_scripts': [
             "odoo-server-autodiscover="
