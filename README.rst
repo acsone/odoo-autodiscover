@@ -56,21 +56,37 @@ The following commands install Odoo 8.0 nightly, then
 install ``base_import_async`` pulling all required dependencies
 automatically (ie ``connector``).
 
+It uses pre-built wheel packages at https://wheelhouse.acsone.eu, so
+the procedure is extremely fast as it does not need to compile dependencies.
+
   .. code:: Bash
 
     # create and activate a virtualenv
     virtualenv venv
-    ./venv/bin/activate
+    . ./venv/bin/activate
     # install Odoo 8.0 nightly
-    pip install -r https://raw.githubusercontent.com/odoo/odoo/8.0/requirements.txt
+    pip install -r https://raw.githubusercontent.com/odoo/odoo/8.0/requirements.txt \
+      --find-links=https://wheelhouse.acsone.eu/odoo-requirements --no-index
     pip install https://nightly.odoo.com/8.0/nightly/src/odoo_8.0.latest.zip
     # install odoo-autodiscover
     pip install odoo-autodiscover
     # install base_import_async from wheelhouse.acsone.eu
-    pip install odoo-addon-base_import_async --find-links=https://wheelhouse.acsone.eu/oca-8.0 --no-index
+    pip install odoo-addon-base_import_async \
+      --find-links=https://wheelhouse.acsone.eu/oca-8.0 --no-index
     # start odoo
     openerp-server-autodiscover
 
+Should you like to have an Odoo shell, simply pip install the module:
+
+  .. code:: Bash
+
+    pip install odoo-addon-shell \
+      --find-links=https://wheelhouse.acsone.eu/oca-8.0 --no-index
+    odoo-autodiscover.py shell
+
+To view addon packages that are installed in your virtualenv,
+simply use ``pip list | grep odoo-addon-`` (note official addons
+are part of the ``odoo`` package).
 
 Technical note
 ~~~~~~~~~~~~~~
