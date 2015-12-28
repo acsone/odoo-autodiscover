@@ -8,28 +8,37 @@ odoo-autodiscover
 
 Odoo server startup scripts that discover Odoo addons
 automatically without the need of the ``--addons-path`` option.
-
-It works by looking at addons in the odoo_addons namespace
+They work by looking at addons in the ``odoo_addons`` namespace
 package.
 
-The following scripts are provided by this package:
+This is the basic building block to package and distribute
+Odoo addons using standard python infrastructure (ie
+`setuptools <https://pypi.python.org/pypi/setuptools>`_,
+`pip <https://pypi.python.org/pypi/pip>`_,
+`wheel <https://pypi.python.org/pypi/wheel>`_,
+and `pypi <https://pypi.python.org>`_).
 
-* ``odoo-autodiscover.py`` is the equivalent of the ``odoo.py`` script
+The following thin wrappers around official Odoo startup scripts
+are provided:
+
+* ``odoo-autodiscover.py`` is the equivalent of ``odoo.py``
 * ``openerp-server-autodiscover`` is the equivalent of ``openerp-server``
 * ``odoo-server-autodiscover`` is an alias for ``openerp-server-autodiscover``
 
-These scripts have exactly the same behaviour and options as
-their standard Odoo counterpart, except they look for addons
-by examining all distributions providing the ``odoo_addons`` namespace
-package.
+These scripts have exactly the same behaviour and options as their official
+Odoo counterparts, except they look for additional addons by examining all
+distributions providing the ``odoo_addons`` namespace package.
 
 How to install
 --------------
 
-* create a virtualenv
+* create a virtualenv and make sure you have a recent version of pip
+  (by running ``pip install -U pip`` or using
+  `get-pip.py <https://bootstrap.pypa.io/get-pip.py>`_)
 * install Odoo with the standard Odoo installation procedure
-* make sure odoo is installed (the following commands must work:
-  ``python -c "import openerp"``, ``odoo.py`` and ``openerp-server``)
+* make sure Odoo is installed (the following commands must work:
+  ``python -c "import openerp"``, ``odoo.py`` and ``openerp-server``,
+  and ``pip list`` must show the ``odoo`` package)
 * install this package (``pip install odoo-autodiscover``)
 
 How to use
@@ -37,19 +46,42 @@ How to use
 
 * create or install odoo addons in the ``odoo_addons`` namespace package
   possibly with the help of the `setuptools-odoo
-  <https://github.com/acsone/setuptools-odoo>`_ package
+  <https://github.com/acsone/setuptools-odoo>`_ package.
 * run odoo with ``openerp-server-autodiscover`` or ``odoo-autodiscover.py``
   and notice the addons path is constructued automatically
+
+Complete example
+----------------
+
+The following commands install Odoo 8.0 nightly, then
+install ``base_import_async`` pulling all required dependencies
+automatically (ie ``connector``).
+
+  .. code:: Bash
+
+    # create and activate a virtualenv
+    virtualenv venv
+    ./venv/bin/activate
+    # install Odoo 8.0 nightly
+    pip install -r https://raw.githubusercontent.com/odoo/odoo/8.0/requirements.txt
+    pip install https://nightly.odoo.com/8.0/nightly/src/odoo_8.0.latest.zip
+    # install odoo-autodiscover
+    pip install odoo-autodiscover
+    # install base_import_async from wheelhouse.acsone.eu
+    pip install odoo-addon-base_import_async --find-links=https://wheelhouse.acsone.eu/oca-8.0 --no-index
+    # start odoo
+    openerp-server-autodiscover
+
 
 Technical note
 --------------
 
-Since it's not possible to make openerp.addons a namespace package
+Since it's not possible to make ``openerp.addons`` a namespace package
 (because ``openerp/__init__.py`` contains code), we use a pseudo-package named
-odoo_addons for the sole purpose of discovering addons installed with
-setuptools in that namespace. odoo_addons is not intended to be imported
+``odoo_addons`` for the sole purpose of discovering addons installed with
+setuptools in that namespace. ``odoo_addons`` is not intended to be imported
 as the Odoo import hook will make sure all addons can be imported from
-openerp.addons.
+``openerp.addons`` as usual.
 
 See https://pythonhosted.org/setuptools/pkg_resources.html for more
 information about namespace packages.
@@ -58,9 +90,20 @@ See https://github.com/odoo/odoo/pull/8758 to follow progress with making
 openerp.addons a namespace package, which will hopefully make this package
 obsolete in the future.
 
+Links
+-----
+
+* code repository: https://github.com/acsone/odoo-autodiscover
+* report issues at: https://github.com/acsone/odoo-autodiscover/issues
+* see also setuptools-odoo: https://github.com/acsone/setuptools-odoo
+
 Credits
 -------
 
 Author:
 
   * Stéphane Bidoul (ACSONE)
+
+Many thanks to Daniel Reis who cleared the path, and Laurent Mignon who convinced
+me it was possible to do it using standard Python setup tools and had the idea of
+the odoo_addons namespace package.
