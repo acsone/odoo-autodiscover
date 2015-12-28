@@ -9,3 +9,6 @@ How to release
 * git push --tags
 * python setup.py sdist bdist_wheel
 * twine upload
+* increment version (last digit + .dev)
+* add unreleased line on top of CHANGES.rst
+* git commit and push
