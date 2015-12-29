@@ -47,7 +47,7 @@ How to use
 
 * create or install odoo addons in the ``odoo_addons`` namespace package
   possibly with the help of the `setuptools-odoo
-  <https://github.com/acsone/setuptools-odoo>`_ package.
+  <https://pypi.python.org/pypi/setuptools-odoo>`_ package.
 * run odoo with ``openerp-server-autodiscover`` or ``odoo-autodiscover.py``
   and notice the addons path is constructued automatically
 
@@ -114,7 +114,7 @@ Useful links
 * pypi page: https://pypi.python.org/pypi/odoo-autodiscover
 * code repository: https://github.com/acsone/odoo-autodiscover
 * report issues at: https://github.com/acsone/odoo-autodiscover/issues
-* see also setuptools-odoo: https://github.com/acsone/setuptools-odoo
+* see also setuptools-odoo: https://pypi.python.org/pypi/setuptools-odoo
 
 Credits
 ~~~~~~~
