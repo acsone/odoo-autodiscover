@@ -68,8 +68,7 @@ build dependencies.
     virtualenv venv
     . ./venv/bin/activate
     # install Odoo 8.0 nightly
-    pip install -r https://raw.githubusercontent.com/odoo/odoo/8.0/requirements.txt \
-      --find-links=https://wheelhouse.acsone.eu/odoo-requirements --no-index
+    pip install -r https://raw.githubusercontent.com/odoo/odoo/8.0/requirements.txt
     pip install https://nightly.odoo.com/8.0/nightly/src/odoo_8.0.latest.zip
     # install odoo-autodiscover
     pip install odoo-autodiscover
