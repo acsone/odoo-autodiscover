@@ -73,8 +73,7 @@ build dependencies.
     # install odoo-autodiscover
     pip install odoo-autodiscover
     # install base_import_async from wheelhouse.acsone.eu
-    pip install odoo-addon-base_import_async \
-      --find-links=https://wheelhouse.acsone.eu/oca-8.0 --no-index
+    pip install odoo-addon-base_import_async --find-links=https://wheelhouse.acsone.eu/oca-8.0
     # start odoo
     openerp-server-autodiscover
 
@@ -82,8 +81,7 @@ Should you like to have an Odoo shell, simply pip install the module:
 
   .. code:: Bash
 
-    pip install odoo-addon-shell \
-      --find-links=https://wheelhouse.acsone.eu/oca-8.0 --no-index
+    pip install odoo-addon-shell --find-links=https://wheelhouse.acsone.eu/oca-8.0
     odoo-autodiscover.py shell
 
 To view addon packages that are installed in your virtualenv,
