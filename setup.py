@@ -7,7 +7,7 @@ import setuptools
 
 setuptools.setup(
     name='odoo-autodiscover',
-    version='1.0.1.dev',
+    version='1.0.1',
     description='An Odoo launcher that discovers addons automatically',
     long_description='\n'.join((
         open('README.rst').read(),
@@ -18,7 +18,7 @@ setuptools.setup(
         # 'Framework :: Odoo',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: '
-            'GNU Lesser General Public License v3 (LGPLv3)',
+        'GNU Lesser General Public License v3 (LGPLv3)',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.7',
     ],
