@@ -1,6 +1,10 @@
 Changes
 ~~~~~~~
 
+1.0.2 (unreleased)
+------------------
+-
+
 1.0.1 (2015-12-30)
 ------------------
 - [FIX] odoo-autodiscover.py: more reliable way to discover and import

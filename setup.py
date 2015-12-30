@@ -7,7 +7,7 @@ import setuptools
 
 setuptools.setup(
     name='odoo-autodiscover',
-    version='1.0.1',
+    version='1.0.2.dev1',
     description='An Odoo launcher that discovers addons automatically',
     long_description='\n'.join((
         open('README.rst').read(),
