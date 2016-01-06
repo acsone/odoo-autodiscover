@@ -58,9 +58,7 @@ The following commands install Odoo 8.0 nightly, then
 install ``base_import_async`` pulling all required dependencies
 automatically (ie ``connector``).
 
-It uses pre-built wheel packages at https://wheelhouse.acsone.eu, so
-the procedure is extremely fast and you don't need any compiler nor
-build dependencies.
+It uses pre-built wheel packages for all OCA addons from https://wheelhouse.acsone.eu.
 
   .. code:: Bash
 
