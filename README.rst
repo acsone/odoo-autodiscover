@@ -24,6 +24,7 @@ are provided:
 
 * ``odoo-autodiscover.py`` is the equivalent of ``odoo.py``
 * ``openerp-server-autodiscover`` is the equivalent of ``openerp-server``
+* ``openerp-gevent-autodiscover`` is the equivalent of ``openerp-gevent``
 * ``odoo-server-autodiscover`` is an alias for ``openerp-server-autodiscover``
 
 These scripts have exactly the same behaviour and options as their official

@@ -3,8 +3,12 @@
 # License LGPLv3 (http://www.gnu.org/licenses/lgpl-3.0-standalone.html)
 
 import os
+import subprocess
+import sys
+
 import openerp
 from openerp.tools.parse_version import parse_version
+from openerp.tools import stripped_sys_argv
 
 
 def patch():
@@ -12,6 +16,8 @@ def patch():
     version = openerp.cli.server.__version__
     if parse_version(version) < parse_version('8.0'):
         raise RuntimeError("Unsupported Odoo version %s" % version)
+
+    # monkey-patch sys path for autodiscovery of addons
 
     initialize_sys_path_orig = openerp.modules.module.initialize_sys_path
 
@@ -30,3 +36,15 @@ def patch():
             pass
 
     openerp.modules.module.initialize_sys_path = initialize_sys_path_odoo_addons
+
+    # monkey-patch long_polling_spawn to launch the autodiscover version
+
+    def long_polling_spawn(self):
+        nargs = stripped_sys_argv()
+        cmd = nargs[0]
+        cmd = os.path.join(os.path.dirname(cmd), "openerp-gevent-autodiscover")
+        nargs[0] = cmd
+        popen = subprocess.Popen([sys.executable] + nargs)
+        self.long_polling_pid = popen.pid
+
+    openerp.service.server.PreforkServer.long_polling_spawn = long_polling_spawn

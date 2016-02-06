@@ -41,6 +41,8 @@ setuptools.setup(
             "odoo_autodiscover.odoo_server_autodiscover:main",
             "openerp-server-autodiscover="
             "odoo_autodiscover.odoo_server_autodiscover:main",
+            "openerp-gevent-autodiscover="
+            "odoo_autodiscover.odoo_gevent_autodiscover:main",
         ],
     },
 )
