@@ -1,7 +1,7 @@
 Changes
 ~~~~~~~
 
-1.0.2 (unreleased)
+1.0.2 (2016-02-06)
 ------------------
 - [IMP] add openerp-gevent-autodiscover, and monkey patch the prefork server
   to launch that script instead of openerp-gevent.
