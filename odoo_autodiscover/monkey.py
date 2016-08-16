@@ -3,6 +3,7 @@
 # License LGPLv3 (http://www.gnu.org/licenses/lgpl-3.0-standalone.html)
 
 import os
+import pkg_resources
 import subprocess
 import sys
 
@@ -27,6 +28,11 @@ def patch():
         ad_paths = openerp.modules.module.ad_paths
 
         try:
+            # explicit workaround for https://github.com/pypa/pip/issues/3 and
+            # https://github.com/pypa/setuptools/issues/250 (it sort of works
+            # without this but I'm not sure why, so better be safe)
+            pkg_resources.declare_namespace('odoo_addons')
+
             for ad in __import__('odoo_addons').__path__:
                 ad = os.path.abspath(ad)
                 if ad not in ad_paths:
