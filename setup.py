@@ -30,7 +30,7 @@ setuptools.setup(
         'odoo_autodiscover',
     ],
     install_requires=[
-        'odoo>=8.0a',
+        'odoo>=8.0a,<9.1a',
     ],
     scripts=[
          'odoo-autodiscover.py'
