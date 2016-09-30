@@ -12,6 +12,13 @@ automatically without the need of the ``--addons-path`` option.
 They work by looking at addons in the ``odoo_addons`` namespace
 package.
 
+.. note:: odoo-autodiscover is for Odoo 8 and 9
+
+   As from Odoo 10, autodiscovery is built in Odoo,
+   which looks for addons in all locations of the odoo.addons
+   namespace package, in addition to the explicit --addons-path
+   option.
+
 This is the basic building block to package and distribute
 Odoo addons using standard python infrastructure (ie
 `setuptools <https://pypi.python.org/pypi/setuptools>`_,
