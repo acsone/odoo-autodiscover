@@ -12,11 +12,24 @@ from openerp.tools.parse_version import parse_version
 from openerp.tools import stripped_sys_argv
 
 
+_done = False
+
+
 def patch():
-    """ Monkey patch Odoo to discover addons from the odoo_addons namespace """
-    version = openerp.cli.server.__version__
-    if parse_version(version) < parse_version('8.0'):
-        raise RuntimeError("Unsupported Odoo version %s" % version)
+    """ Monkey patch Odoo to discover addons from the
+    odoo_addons namespace.  This method is for Odoo 8 and 9 only.
+    """
+    global _done
+    if _done:
+        return
+
+    version = parse_version(openerp.cli.server.__version__)
+    if version < parse_version('8.0'):
+        # unsupported Odoo version
+        return
+    if version >= parse_version('10.0'):
+        # nothing to do
+        return
 
     # monkey-patch sys path for autodiscovery of addons
 
@@ -41,7 +54,8 @@ def patch():
             # odoo_addons is not provided by any distribution
             pass
 
-    openerp.modules.module.initialize_sys_path = initialize_sys_path_odoo_addons
+    openerp.modules.module.initialize_sys_path = \
+        initialize_sys_path_odoo_addons
 
     # monkey-patch long_polling_spawn to launch the autodiscover version
 
@@ -53,4 +67,7 @@ def patch():
         popen = subprocess.Popen([sys.executable] + nargs)
         self.long_polling_pid = popen.pid
 
-    openerp.service.server.PreforkServer.long_polling_spawn = long_polling_spawn
+    openerp.service.server.PreforkServer.long_polling_spawn = \
+        long_polling_spawn
+
+    _done = True

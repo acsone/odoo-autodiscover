@@ -5,12 +5,14 @@
 
 import imp
 import sys
+import warnings
 from distutils.spawn import find_executable
 
 from odoo_autodiscover import monkey
 
 
 def main():
+    warnings.warn('%s is deprecated; please run odoo normally.' % sys.argv[0])
     odoo_py = find_executable('odoo.py')
     if not odoo_py:
         sys.stderr.write('The odoo.py executable could not be found, '
