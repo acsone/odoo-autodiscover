@@ -3,11 +3,12 @@
 # License LGPLv3 (http://www.gnu.org/licenses/lgpl-3.0-standalone.html)
 
 import setuptools
+from distutils.sysconfig import get_python_lib
 
 
 setuptools.setup(
     name='odoo-autodiscover',
-    version='1.0.3',
+    use_scm_version=True,
     description='An Odoo launcher that discovers addons automatically',
     long_description='\n'.join((
         open('README.rst').read(),
@@ -21,6 +22,7 @@ setuptools.setup(
         'GNU Lesser General Public License v3 (LGPLv3)',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.7',
+        'Framework :: Odoo',
     ],
     license='LGPLv3',
     author='ACSONE SA/NV',
@@ -30,10 +32,17 @@ setuptools.setup(
         'odoo_autodiscover',
     ],
     install_requires=[
-        'odoo>=8.0a,<9.1a',
+        'odoo>=8.0a,<10.1a',
+        'wrapt',
+    ],
+    setup_requires=[
+        'setuptools-scm',
+    ],
+    data_files=[
+        (get_python_lib(prefix=''), ['zzz_odoo_autodiscover.pth']),
     ],
     scripts=[
-         'odoo-autodiscover.py'
+        'odoo-autodiscover.py'
     ],
     entry_points={
         'console_scripts': [

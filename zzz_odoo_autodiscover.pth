@@ -1,0 +1,1 @@
+import wrapt; wrapt.register_post_import_hook('odoo_autodiscover.post_import_hook:hook', 'odoo'); wrapt.register_post_import_hook('odoo_autodiscover.post_import_hook:hook', 'openerp')
