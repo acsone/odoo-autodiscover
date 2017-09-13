@@ -5,9 +5,9 @@
 
 def hook(package):
     if package.__name__ == 'odoo':
-        if not hasattr(package, 'cli'):
+        if not hasattr(package, 'api'):
             # work around https://github.com/acsone/setuptools-odoo/issues/10
-            # Since 'cli' is not in the odoo package, it means
+            # Since 'api' is not in the odoo package, it means
             # odoo/__init__.py did not run, so what we have here is a dummy
             # odoo package created by setuptools' *-nspkg.pth files.
             # This hook runs after all *-nspkg.pth files because it is named
