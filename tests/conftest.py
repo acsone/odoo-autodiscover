@@ -231,9 +231,9 @@ ODOO_VENV_IDS = [
 
 # enable this to test with an existing venv where odoo and
 # odoo-autodiscover are preinstalled
-if True:
+if False:
     ODOO_VENV_PARAMS.append(
-        ('8.0', True, '/home/sbi-local/.virtualenvs/odoo-autodiscover-test')
+        ('10.0', True, '/home/sbi-local/.virtualenvs/odoo-autodiscover-test')
     )
     ODOO_VENV_IDS.append(
         '8.0:preset_venv'
