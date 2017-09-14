@@ -36,13 +36,7 @@ setuptools.setup(
         'wrapt',
     ],
     setup_requires=[
-        'pytest-runner',
         'setuptools-scm',
-    ],
-    tests_require=[
-        'pytest',
-        'requests',
-        'virtualenv',
     ],
     data_files=[
         (get_python_lib(prefix=''), ['zzz_odoo_autodiscover.pth']),
