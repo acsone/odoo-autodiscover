@@ -133,7 +133,7 @@ class OdooVirtualenv:
                         f.write(chunk)
         with DirectoryChanger(opj(self.odoo_base_dir)):
             subprocess.check_call(
-                ['unzip', self.odoo_zip], 
+                ['unzip', '-q', self.odoo_zip], 
                 universal_newlines=True)
             dir_re = re.compile(r'^odoo-{0}c?-\d{{8}}$'.format(self.series))
             for f in os.listdir('.'):
