@@ -32,11 +32,17 @@ setuptools.setup(
         'odoo_autodiscover',
     ],
     install_requires=[
-        'odoo>=8.0a,<10.1a',
+        # 'odoo>=8.0a,<10.1a',
         'wrapt',
     ],
     setup_requires=[
+        'pytest-runner',
         'setuptools-scm',
+    ],
+    tests_require=[
+        'pytest',
+        'requests',
+        'virtualenv',
     ],
     data_files=[
         (get_python_lib(prefix=''), ['zzz_odoo_autodiscover.pth']),
