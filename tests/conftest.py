@@ -8,7 +8,6 @@ from __future__ import print_function
 import contextlib
 import os
 from os.path import join as opj
-import pkg_resources
 import re
 import shutil
 import subprocess
@@ -62,7 +61,7 @@ class OdooVirtualenv:
 
     def check_virtualenv_installed(self):
         if self.series in ('8.0', '9.0', '10.0'):
-            if not pkg_resources.find_distributions('virtualenv'):
+            if subprocess.call(['python2', '-c', 'import virtualenv']) != 0:
                 raise RuntimeError(
                     'Please install virtualenv before running tests.')
 
@@ -133,7 +132,9 @@ class OdooVirtualenv:
                     for chunk in r:
                         f.write(chunk)
         with DirectoryChanger(opj(self.odoo_base_dir)):
-            subprocess.check_call(['unzip', self.odoo_zip])
+            subprocess.check_call(
+                ['unzip', self.odoo_zip], 
+                universal_newlines=True)
             dir_re = re.compile(r'^odoo-{0}c?-\d{{8}}$'.format(self.series))
             for f in os.listdir('.'):
                 if dir_re.match(f) and os.path.isdir(f):
@@ -170,7 +171,8 @@ class OdooVirtualenv:
 
     def get_addons_paths(self):
         cmd = [self.odoo_exe, '--stop-after-init']
-        output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+        output = subprocess.check_output(
+            cmd, stderr=subprocess.STDOUT, universal_newlines=True)
         addons_path_re = re.compile(r'addons paths: (\[.*?\])', re.MULTILINE)
         mo = addons_path_re.search(output)
         if not mo:
