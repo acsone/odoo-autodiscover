@@ -3,12 +3,10 @@
 # License LGPLv3 (http://www.gnu.org/licenses/lgpl-3.0-standalone.html)
 
 import os
-import pkg_resources
 import subprocess
 import sys
 
 import openerp
-from openerp.tools.parse_version import parse_version
 from openerp.tools import stripped_sys_argv
 
 
@@ -23,11 +21,7 @@ def patch():
     if _done:
         return
 
-    version = parse_version(openerp.cli.server.__version__)
-    if version < parse_version('8.0'):
-        # unsupported Odoo version
-        return
-    if version >= parse_version('10.0'):
+    if openerp.release.series not in ('8.0', '9.0'):
         # nothing to do
         return
 
@@ -44,7 +38,7 @@ def patch():
             # explicit workaround for https://github.com/pypa/pip/issues/3 and
             # https://github.com/pypa/setuptools/issues/250 (it sort of works
             # without this but I'm not sure why, so better be safe)
-            pkg_resources.declare_namespace('odoo_addons')
+            __import__('pkg_resources').declare_namespace('odoo_addons')
 
             for ad in __import__('odoo_addons').__path__:
                 ad = os.path.abspath(ad)
