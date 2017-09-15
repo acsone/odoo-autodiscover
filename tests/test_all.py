@@ -6,7 +6,7 @@
 from __future__ import print_function
 
 
-def test_odoo_auto_discover_only(odoo_venv):
+def test_odoo_auto_discover(odoo_venv):
     odoo_venv.check_import_odoo()
     odoo_venv.check_addons_paths()
 
