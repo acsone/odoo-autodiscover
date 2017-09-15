@@ -198,8 +198,11 @@ class OdooVirtualenv:
         return False
 
     def _has_odoo_dir(self, addons_paths):
+        assert self.editable
+        # resolve symlinks because odoo addons paths have symlink resolved
+        real_odoo_dir = os.path.realpath(self.odoo_dir)
         for ap in addons_paths:
-            if self.odoo_dir in ap:
+            if real_odoo_dir in ap:
                 return True
         return False
 
