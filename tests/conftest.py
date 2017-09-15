@@ -12,6 +12,7 @@ import re
 import shutil
 import subprocess
 import tempfile
+from textwrap import dedent
 
 import requests
 import pytest
@@ -161,6 +162,17 @@ class OdooVirtualenv:
                 [self.python_exe, '-c', 'from odoo import api'])
         else:
             self.raise_unsupported()
+        #
+        # all versions
+        #
+        # this is a use case from openupgradelib
+        script = dedent("""
+        try:
+            from odoo.exceptions import UserError
+        except ImportError:
+            from openerp.exceptions import Warning as UserError
+        """)
+        subprocess.check_call([self.python_exe, '-c', script])
 
     def pip_install_test_addon(self, name, editable):
         addon_dir = opj(self.root_dir, 'tests', 'addons', self.series, name)

@@ -15,6 +15,7 @@ def hook_odoo(package):
     # This hook runs after all *-nspkg.pth files because it is named
     # zzz_ and .pth file run in alphabetical order.
     """
+    # TODO: find a way to run this for Odoo 10.0 only
     if package.__name__ == 'odoo':
         if not hasattr(package, 'release'):
             # Since 'release' is not in the odoo package, it means
@@ -27,7 +28,8 @@ def hook_odoo(package):
             if 'odoo.addons' in sys.modules:
                 _odoo_addons_path.update(sys.modules['odoo.addons'].__path__)
                 del sys.modules['odoo.addons']
-            del sys.modules['odoo']
+            if 'odoo' in sys.modules:
+                del sys.modules['odoo']
     elif package.__name__ == 'odoo.release':
         # here we are sure odoo/__init__.py has run
         # we restore odoo.addons.__path__
