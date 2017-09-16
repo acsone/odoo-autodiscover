@@ -7,12 +7,9 @@ import warnings
 
 import openerp
 
-from . import monkey
-
 
 def main():
     warnings.warn('%s is deprecated; please run odoo normally.' % sys.argv[0])
-    monkey.patch()
     openerp.cli.main()
 
 

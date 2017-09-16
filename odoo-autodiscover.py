@@ -8,8 +8,6 @@ import sys
 import warnings
 from distutils.spawn import find_executable
 
-from odoo_autodiscover import monkey
-
 
 def main():
     warnings.warn('%s is deprecated; please run odoo normally.' % sys.argv[0])
@@ -19,7 +17,6 @@ def main():
                          'therefore odoo-autodiscover.py can not start.\n')
         sys.exit(1)
     odoo = imp.load_source('odoo', odoo_py)
-    monkey.patch()
     odoo.main()
 
 
