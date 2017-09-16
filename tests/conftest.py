@@ -114,36 +114,15 @@ class OdooVirtualenv:
     def download_odoo(self):
         if os.path.exists(self.odoo_dir):
             return
-        if self.series == '11.0':
-            clone_cmd = [
-                'git', 'clone', '--depth=1',
-                'https://github.com/odoo/odoo.git',
-                self.odoo_dir,
-            ]
-            subprocess.check_call(clone_cmd)
-            return
-        if not os.path.exists(self.odoo_zip):
-            odoo_url = \
-                'https://nightly.odoo.com/{0}/nightly/src/'\
-                'odoo_{0}.latest.zip'.\
-                format(self.series)
-            r = requests.get(odoo_url, stream=True)
-            if r.status_code == 200:
-                with open(self.odoo_zip, 'wb') as f:
-                    for chunk in r:
-                        f.write(chunk)
-        with DirectoryChanger(opj(self.odoo_base_dir)):
-            subprocess.check_call(
-                ['unzip', '-q', self.odoo_zip],
-                universal_newlines=True)
-            dir_re = re.compile(r'^odoo-{0}c?-\d{{8}}$'.format(self.series))
-            for f in os.listdir('.'):
-                if dir_re.match(f) and os.path.isdir(f):
-                    os.rename(f, self.odoo_dir)
-                    break
-            else:
-                raise RuntimeError(
-                    'Odoo not found in {}'.format(self.odoo_zip))
+        url = 'https://github.com/odoo/odoo.git'
+        if self.series in ('8.0', '9.0', '10.0'):
+            branch = self.series
+        elif self.series == '11.0':
+            branch = 'master'
+        else:
+            self.raise_unsupported()
+        cmd = ['git', 'clone', '--depth=1', '-b', branch, url, self.odoo_dir]
+        subprocess.check_call(cmd)
 
     def pip_install_odoo(self):
         self.download_odoo()
