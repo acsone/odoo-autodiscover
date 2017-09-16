@@ -122,6 +122,14 @@ class OdooVirtualenv:
     def download_odoo(self):
         if os.path.exists(self.odoo_dir):
             return
+        if self.series == '11.0':
+            clone_cmd = [
+                'git', 'clone', '--depth=1',
+                'https://github.com/odoo/odoo.git',
+                self.odoo_dir,
+            ]
+            subprocess.check_call(clone_cmd)
+            return
         if not os.path.exists(self.odoo_zip):
             odoo_url = \
                 'https://nightly.odoo.com/{0}/nightly/src/'\
@@ -157,7 +165,7 @@ class OdooVirtualenv:
         if self.series in ('8.0', '9.0'):
             subprocess.check_call(
                 [self.python_exe, '-c', 'from openerp import api'])
-        elif self.series in ('10.0', ):
+        elif self.series in ('10.0', '11.0'):
             subprocess.check_call(
                 [self.python_exe, '-c', 'from odoo import api'])
         else:
@@ -233,6 +241,8 @@ class OdooVirtualenv:
 
 
 ODOO_VENV_PARAMS = [
+    ('11.0', False, None),
+    ('11.0', True, None),
     ('10.0', False, None),
     ('10.0', True, None),
     ('9.0', False, None),
