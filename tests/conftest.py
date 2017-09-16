@@ -104,9 +104,7 @@ class OdooVirtualenv:
         self.pip_install(self.root_dir)
 
     def pip_install_odoo_dependencies(self):
-        requirements = \
-            'https://raw.githubusercontent.com/odoo/odoo/{}/' \
-            'requirements.txt'.format(self.series)
+        requirements = opj(self.odoo_dir, 'requirements.txt')
         args = [
             '-f', 'https://wheelhouse.acsone.eu/manylinux1',
             '-r', requirements,
