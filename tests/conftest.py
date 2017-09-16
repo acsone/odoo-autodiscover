@@ -14,7 +14,6 @@ import subprocess
 import tempfile
 from textwrap import dedent
 
-import requests
 import pytest
 
 
