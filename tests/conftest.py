@@ -43,28 +43,22 @@ class OdooVirtualenv:
         if self.preset_venv:
             self.venv_dir = self.preset_venv
         else:
-            self.check_virtualenv_installed()
             self.tmpd = tempfile.mkdtemp()
             self.venv_dir = opj(self.tmpd, 'venv')
             if self.series in ('8.0', '9.0', '10.0'):
                 make_venv_cmd = ['python2', '-m', 'virtualenv', self.venv_dir]
             elif self.series in ('11.0', ):
-                make_venv_cmd = ['python3', '-m', 'venv', self.venv_dir]
+                make_venv_cmd = ['python3', '-m', 'virtualenv', self.venv_dir]
             else:
                 self.raise_unsupported()
             subprocess.check_call(make_venv_cmd)
+            self.pip_install('-U', 'setuptools')
             self.pip_install_odoo()
             self.pip_install_odoo_autodiscover()
 
     def tearDown(self):
         if self.tmpd:
             shutil.rmtree(self.tmpd)
-
-    def check_virtualenv_installed(self):
-        if self.series in ('8.0', '9.0', '10.0'):
-            if subprocess.call(['python2', '-c', 'import virtualenv']) != 0:
-                raise RuntimeError(
-                    'Please install virtualenv before running tests.')
 
     def raise_unsupported(self):
         raise RuntimeError("Unsupported Odoo series %s" % self.series)
