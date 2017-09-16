@@ -13,7 +13,7 @@ def hook_odoo(package):
     # This hook should runs after all *-nspkg.pth files because it is named
     # zzz_ and .pth file run in alphabetical order.
     """
-    if sys.version_info[0] != '2':
+    if sys.version_info.major != 2:
         return
     if package.__name__ == 'odoo':
         if not hasattr(package, 'release'):
