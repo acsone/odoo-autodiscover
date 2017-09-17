@@ -69,13 +69,14 @@ class OdooVirtualenv:
         return opj(self.odoo_base_dir, self.series)
 
     def pip_install(self, *args):
-        cmd = [opj(self.venv_dir, 'bin', 'pip'), 'install'] + \
-            list(args)
+        cmd = [opj(self.venv_dir, 'bin', 'pip'), 'install'] + list(args)
         subprocess.check_call(cmd)
 
     def pip_uninstall(self, name):
         cmd = [opj(self.venv_dir, 'bin', 'pip'), 'uninstall', '-y', name]
         subprocess.check_call(cmd)
+        # TODO remove trailing *-nspkg.pth file to work around pip issue
+        #      https://github.com/pypa/pip/issues/4176
 
     def pip_install_odoo_autodiscover(self):
         self.pip_install(self.root_dir)
@@ -205,8 +206,10 @@ def _add_param_from_environ():
     preset_venv = os.environ.get('ODOO_AUTODISCOVER_PRESET_VENV')
     if not preset_venv:
         return
+    # find installed Odoo version by parsing `pip list` output
     pip_list = subprocess.check_output(
-        [opj(preset_venv, 'bin', 'pip'), 'list'], universal_newlines=True)
+        [opj(preset_venv, 'bin', 'pip'), 'list', '--format=legacy'],
+        universal_newlines=True)
     odoo_re = r'^odoo \(([0-9][0-9]?\.0)[^ ]*(\)|.+\))$'
     mo = re.search(odoo_re, pip_list, re.MULTILINE)
     if not mo:
