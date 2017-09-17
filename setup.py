@@ -37,7 +37,11 @@ setuptools.setup(
         # 'odoo>=8.0a,<10.1a',
         'wrapt',
     ],
-    python_requires='~=2.7, >=3.5',
+    python_requires='''
+        >=2.7,
+        !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*,
+        >=3.5
+    ''',
     setup_requires=[
         'setuptools-scm',
     ],
