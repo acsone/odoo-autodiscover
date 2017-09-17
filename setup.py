@@ -21,9 +21,7 @@ setuptools.setup(
         'License :: OSI Approved :: '
         'GNU Lesser General Public License v3 (LGPLv3)',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python',
         'Framework :: Odoo',
     ],
     license='LGPLv3',
@@ -37,11 +35,7 @@ setuptools.setup(
         # 'odoo>=8.0a,<10.1a',
         'wrapt',
     ],
-    python_requires='''
-        >=2.7,
-        !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*,
-        >=3.5
-    ''',
+    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
     setup_requires=[
         'setuptools-scm',
     ],
