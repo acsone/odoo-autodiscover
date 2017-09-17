@@ -208,29 +208,36 @@ ODOO_VENV_PARAMS = [
     ('8.0', '-e', 'python2', None),
 ]
 
-ODOO_VENV_IDS = [
-    '{series}{editable}-{python}'.format(**locals())
-    for series, editable, python, _ in ODOO_VENV_PARAMS
-]
 
-# enable this to test with an existing venv where odoo and
-# odoo-autodiscover are preinstalled
-if True:
-    ODOO_VENV_PARAMS.append(
-        ('11.0', True, 'python3',
-         '/home/sbi-local/.virtualenvs/odoo-autodiscover-test3')
-    )
-    ODOO_VENV_IDS.append(
-        '11.0:preset_venv'
-    )
-if True:
-    ODOO_VENV_PARAMS.append(
-        ('10.0', True, 'python2',
-         '/home/sbi-local/.virtualenvs/odoo-autodiscover-test')
-    )
-    ODOO_VENV_IDS.append(
-        '10.0:preset_venv'
-    )
+def _add_param_from_environ():
+    preset_venv = os.environ.get('ODOO_AUTODISCOVER_PRESET_VENV')
+    if not preset_venv:
+        return
+    pip_list = subprocess.check_output(
+        [opj(preset_venv, 'bin', 'pip'), 'list'], universal_newlines=True)
+    odoo_re = r'^odoo \(([0-9][0-9]?\.0)[^ ]*(\)|.+\))$'
+    mo = re.search(odoo_re, pip_list, re.MULTILINE)
+    if not mo:
+        raise RuntimeError("Odoo not installed in {}?".format(preset_venv))
+    series = mo.group(1)
+    editable = '-e' if mo.group(2) != ')' else ''
+    ODOO_VENV_PARAMS.append((series, editable, None, preset_venv))
+
+
+_add_param_from_environ()
+
+
+def _make_venv_ids():
+    venv_ids = []
+    for series, editable, python, preset_venv in ODOO_VENV_PARAMS:
+        if preset_venv:
+            venv_ids.append('{series}-preset'.format(**locals()))
+        else:
+            venv_ids.append('{series}{editable}-{python}'.format(**locals()))
+    return venv_ids
+
+
+ODOO_VENV_IDS = _make_venv_ids()
 
 
 @pytest.fixture(scope="function", params=ODOO_VENV_PARAMS, ids=ODOO_VENV_IDS)
