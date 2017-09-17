@@ -1,6 +1,17 @@
 Changes
 ~~~~~~~
 
+2.0.0.beta1 (2017-09-17)
+------------------------
+- major rewrite: instead of adapted startup scripts that monkey patch Odoo,
+  use a post import hook that automatically does the job as soon as odoo or openerp
+  is imported.
+- for Odoo 10 and 11, do not rely on namespace packages, but instead look for odoo/addons
+  directories in PYTHONPATH 
+- automated tests
+- Odoo 10 support, to work around https://github.com/acsone/setuptools-odoo/issues/10
+- preliminary Odoo 11 support
+
 1.0.3 (2016-09-30)
 ------------------
 - odoo-autodiscover is built-in Odoo 10!

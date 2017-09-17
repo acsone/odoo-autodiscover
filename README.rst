@@ -6,58 +6,45 @@ odoo-autodiscover
    :alt: License: LGPL-3
 .. image:: https://badge.fury.io/py/odoo-autodiscover.svg
     :target: https://badge.fury.io/py/odoo-autodiscover
+.. image:: https://travis-ci.org/acsone/odoo-autodiscover.svg?branch=master
+   :target: https://travis-ci.org/acsone/odoo-autodiscover
 
-Odoo server startup scripts that discover Odoo addons
-automatically without the need of the ``--addons-path`` option.
-They work by looking at addons in the ``odoo_addons`` namespace
-package.
+Enhance Odoo to automatically discover available addons without the need of 
+the ``--addons-path`` option.
 
-.. note:: odoo-autodiscover is for Odoo 8 and 9
+For Odoo 8 and 9, it works by looking at addons in the 
+``odoo_addons`` namespace package. For Odoo 10 and 11, it
+works by looking for ``odoo/addons`` directories in PYTHONPATH.
 
-   As from Odoo 10, autodiscovery is built in Odoo,
-   which looks for addons in all locations of the odoo.addons
-   namespace package, in addition to the explicit --addons-path
-   option.
-
-This is the basic building block to package and distribute
-Odoo addons using standard python infrastructure (ie
-`setuptools <https://pypi.python.org/pypi/setuptools>`_,
-`pip <https://pypi.python.org/pypi/pip>`_,
-`wheel <https://pypi.python.org/pypi/wheel>`_,
-and `pypi <https://pypi.python.org>`_).
-
-The following thin wrappers around official Odoo startup scripts
-are provided:
-
-* ``odoo-autodiscover.py`` is the equivalent of ``odoo.py``
-* ``openerp-server-autodiscover`` is the equivalent of ``openerp-server``
-* ``openerp-gevent-autodiscover`` is the equivalent of ``openerp-gevent``
-* ``odoo-server-autodiscover`` is an alias for ``openerp-server-autodiscover``
-
-These scripts have exactly the same behaviour and options as their official
-Odoo counterparts, except they look for additional addons by examining all
-distributions providing the ``odoo_addons`` namespace package.
+Addons that install this way can be packaged with the help of
+`setuptools-odoo <https://pypi.python.org/pypi/setuptools-odoo>`_.
 
 How to install
 ~~~~~~~~~~~~~~
 
-* create a virtualenv and make sure you have a recent version of pip
+* Create a virtualenv and make sure you have a recent version of pip
   (by running ``pip install -U pip`` or using
-  `get-pip.py <https://bootstrap.pypa.io/get-pip.py>`_)
-* install Odoo with the standard Odoo installation procedure
-* make sure Odoo is installed (the following commands must work:
-  ``python -c "import openerp"``, ``odoo.py`` and ``openerp-server``,
-  and ``pip list`` must show the ``odoo`` package)
-* install this package (``pip install odoo-autodiscover``)
+  `get-pip.py <https://bootstrap.pypa.io/get-pip.py>`_).
+* Install Odoo in your virtualenv with the standard Odoo installation procedure
+  (a good way is to run ``pip install -e .`` from the Odoo root directory).
+* Make sure Odoo is installed correctly:
+
+  * ``pip list`` must show ``odoo``.
+  * for Odoo 8 and 9, running ``python -c "import openerp.api"`` 
+    and ``openerp-server`` must work
+  * for Odoo 10 and 11, running ``python -c "import odoo.api"`` 
+    and ``odoo`` must work 
+
+* Install this package (``pip install odoo-autodiscover``).
 
 How to use
 ~~~~~~~~~~
 
-* create or install odoo addons in the ``odoo_addons`` namespace package
+* create and/or install odoo addons in the ``odoo/addons`` namespace (for Odoo 10 and 11) 
+  or the ``odoo_addons`` namespace (for Odoo 8 and 9),
   possibly with the help of the `setuptools-odoo
   <https://pypi.python.org/pypi/setuptools-odoo>`_ package.
-* run odoo with ``openerp-server-autodiscover`` or ``odoo-autodiscover.py``
-  and notice the addons path is constructued automatically
+* run odoo as usual and notice the addons path is extended automatically.
 
 Complete example
 ~~~~~~~~~~~~~~~~
@@ -78,38 +65,42 @@ It uses pre-built wheel packages for all OCA addons from https://wheelhouse.odoo
     pip install https://nightly.odoo.com/8.0/nightly/src/odoo_8.0.latest.zip
     # install odoo-autodiscover
     pip install odoo-autodiscover
-    # install base_import_async from wheelhouse.odoo-community.org
-    pip install odoo-addon-base_import_async --find-links=https://wheelhouse.odoo-community.org/oca-8.0
+    # install base_import_async from pypi
+    pip install odoo8-addon-base_import_async --pre
     # start odoo
-    openerp-server-autodiscover
+    openerp-server
 
-Should you like to have an Odoo shell, simply pip install the module:
+Should you like to have an Odoo 8 shell, using the OCA shell module, simply pip install the module:
 
   .. code:: Bash
 
-    pip install odoo-addon-shell --find-links=https://wheelhouse.odoo-community.org/oca-8.0
-    odoo-autodiscover.py shell
+    pip install odoo8-addon-shell
+    openerp-server shell
 
 To view addon packages that are installed in your virtualenv,
-simply use ``pip list | grep odoo-addon-`` (note official addons
+simply use ``pip list | grep odoo<8|9|10>-addon-`` (note official addons
 are part of the ``odoo`` package).
 
-Technical note
-~~~~~~~~~~~~~~
+Technical notes
+~~~~~~~~~~~~~~~
 
-Since it's not possible to make ``openerp.addons`` a namespace package
+With Odoo 8 and 9 it's not possible to make ``openerp.addons`` a namespace package
 (because ``openerp/__init__.py`` contains code), we use a pseudo-package named
 ``odoo_addons`` for the sole purpose of discovering addons installed with
 setuptools in that namespace. ``odoo_addons`` is not intended to be imported
 as the Odoo import hook will make sure all addons can be imported from
 ``openerp.addons`` as usual.
 
-See https://pythonhosted.org/setuptools/pkg_resources.html for more
-information about namespace packages.
+With Odoo 10, we attempted to use pkg_resource style namespace packages.
+It worked fine until setuptools 31, at which point we had to cope with
+https://github.com/acsone/setuptools-odoo/issues/10. Hence the workaround
+in ``odoo-autodiscover`` 2.0.
 
-See https://github.com/odoo/odoo/pull/8758 to follow progress with making
-openerp.addons a namespace package, which will hopefully make this package
-obsolete in the future.
+For Odoo 11 under Python 3, we hope we can make ``odoo-autodiscover`` obsolete
+again, this is the purpose of https://github.com/odoo/odoo/pull/19517.
+
+See https://packaging.python.org/guides/packaging-namespace-packages/ for more
+information about namespace packages.
 
 Useful links
 ~~~~~~~~~~~~
@@ -129,4 +120,3 @@ Author:
 Many thanks to Daniel Reis who cleared the path, and Laurent Mignon who convinced
 me it was possible to do it using standard Python setup tools and had the idea of
 the odoo_addons namespace package.
-

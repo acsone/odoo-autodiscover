@@ -1,5 +1,8 @@
+Development
+~~~~~~~~~~~
+
 How to run tests
-================
+----------------
 
 To run all tests:
 
@@ -17,7 +20,7 @@ To run faster tests in a preinstalled virtualenv
   with the Odoo version you installed).
 
 How to release
-==============
+--------------
 
 * update changelog in CHANGES.rst
 * python setup.py check --restructuredtext
