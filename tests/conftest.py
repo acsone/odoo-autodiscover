@@ -26,14 +26,14 @@ class OdooVirtualenv:
         self.cache = cache
         self.odoo_base_dir = str(cache.makedir('odoo'))
         self.venv_dir = None
-        self.tmpd = None
+        self.tmp_dir = None
 
     def setUp(self):
         if self.preset_venv:
             self.venv_dir = self.preset_venv
         else:
-            self.tmpd = tempfile.mkdtemp()
-            self.venv_dir = opj(self.tmpd, 'venv')
+            self.tmp_dir = tempfile.mkdtemp()
+            self.venv_dir = opj(self.tmp_dir, 'venv')
             make_venv_cmd = [self.python, '-m', 'virtualenv', self.venv_dir]
             subprocess.check_call(make_venv_cmd)
             self.pip_install('-U', 'setuptools')
@@ -41,18 +41,18 @@ class OdooVirtualenv:
             self.pip_install_odoo_autodiscover()
 
     def tearDown(self):
-        if self.tmpd:
-            shutil.rmtree(self.tmpd)
+        if self.tmp_dir:
+            shutil.rmtree(self.tmp_dir)
 
     def raise_unsupported(self):
         raise RuntimeError("Unsupported Odoo series %s" % self.series)
 
     @property
-    def python_exe(self):
+    def python_bin(self):
         return opj(self.venv_dir, 'bin', 'python')
 
     @property
-    def odoo_exe(self):
+    def odoo_bin(self):
         if self.series in ('8.0', '9.0'):
             return opj(self.venv_dir, 'bin', 'openerp-server')
         elif self.series in ('10.0', '11.0'):
@@ -68,20 +68,13 @@ class OdooVirtualenv:
     def odoo_dir(self):
         return opj(self.odoo_base_dir, self.series)
 
-    @property
-    def odoo_zip(self):
-        return opj(self.odoo_base_dir, 'odoo-{}.zip'.format(self.series))
-
     def pip_install(self, *args):
         cmd = [opj(self.venv_dir, 'bin', 'pip'), 'install'] + \
             list(args)
-        print('==>', cmd)
         subprocess.check_call(cmd)
 
-    def pip_uninstall(self, *args):
-        cmd = [opj(self.venv_dir, 'bin', 'pip'), 'uninstall', '-y'] + \
-            list(args)
-        print('==>', cmd)
+    def pip_uninstall(self, name):
+        cmd = [opj(self.venv_dir, 'bin', 'pip'), 'uninstall', '-y', name]
         subprocess.check_call(cmd)
 
     def pip_install_odoo_autodiscover(self):
@@ -119,10 +112,10 @@ class OdooVirtualenv:
     def check_import_odoo(self):
         if self.series in ('8.0', '9.0'):
             subprocess.check_call(
-                [self.python_exe, '-c', 'from openerp import api'])
+                [self.python_bin, '-c', 'from openerp import api'])
         elif self.series in ('10.0', '11.0'):
             subprocess.check_call(
-                [self.python_exe, '-c', 'from odoo import api'])
+                [self.python_bin, '-c', 'from odoo import api'])
         else:
             self.raise_unsupported()
         #
@@ -135,7 +128,7 @@ class OdooVirtualenv:
         except ImportError:
             from openerp.exceptions import Warning as UserError
         """)
-        subprocess.check_call([self.python_exe, '-c', script])
+        subprocess.check_call([self.python_bin, '-c', script])
 
     def pip_install_test_addon(self, name, editable):
         addon_dir = opj(self.root_dir, 'tests', 'addons', self.series, name)
@@ -145,7 +138,7 @@ class OdooVirtualenv:
             self.pip_install(addon_dir)
 
     def get_addons_paths(self):
-        cmd = [self.odoo_exe, '--stop-after-init']
+        cmd = [self.odoo_bin, '--stop-after-init']
         output = subprocess.check_output(
             cmd, stderr=subprocess.STDOUT, universal_newlines=True)
         addons_path_re = re.compile(r'addons paths: (\[.*?\])', re.MULTILINE)
@@ -184,7 +177,6 @@ class OdooVirtualenv:
 
     def check_addons_paths(self, editable_addons=[], not_editable_addons=[]):
         addons_paths = self.get_addons_paths()
-        print("addons paths:", addons_paths)
         if self.editable:
             assert self._has_odoo_dir(addons_paths)
         if not not_editable_addons and self.editable:
@@ -196,16 +188,16 @@ class OdooVirtualenv:
 
 
 ODOO_VENV_PARAMS = [
-    ('11.0', '', 'python3', None),
-    ('11.0', '-e', 'python3', None),
-    ('11.0', '', 'python2', None),
-    ('11.0', '-e', 'python2', None),
-    ('10.0', '', 'python2', None),
-    ('10.0', '-e', 'python2', None),
-    ('9.0', '', 'python2', None),
-    ('9.0', '-e', 'python2', None),
-    ('8.0', '', 'python2', None),
-    ('8.0', '-e', 'python2', None),
+    ('11.0', False, 'python3', None),
+    ('11.0', True, 'python3', None),
+    ('11.0', False, 'python2', None),
+    ('11.0', True, 'python2', None),
+    ('10.0', False, 'python2', None),
+    ('10.0', True, 'python2', None),
+    ('9.0', False, 'python2', None),
+    ('9.0', True, 'python2', None),
+    ('8.0', False, 'python2', None),
+    ('8.0', True, 'python2', None),
 ]
 
 
@@ -220,24 +212,28 @@ def _add_param_from_environ():
     if not mo:
         raise RuntimeError("Odoo not installed in {}?".format(preset_venv))
     series = mo.group(1)
-    editable = '-e' if mo.group(2) != ')' else ''
+    editable = (mo.group(2) != ')')
     ODOO_VENV_PARAMS.append((series, editable, None, preset_venv))
 
 
 _add_param_from_environ()
 
 
-def _make_venv_ids():
+def _make_odoo_venv_ids():
     venv_ids = []
     for series, editable, python, preset_venv in ODOO_VENV_PARAMS:
         if preset_venv:
             venv_ids.append('{series}-preset'.format(**locals()))
         else:
+            if editable:
+                editable = '-editable'
+            else:
+                editable = ''
             venv_ids.append('{series}{editable}-{python}'.format(**locals()))
     return venv_ids
 
 
-ODOO_VENV_IDS = _make_venv_ids()
+ODOO_VENV_IDS = _make_odoo_venv_ids()
 
 
 @pytest.fixture(scope="function", params=ODOO_VENV_PARAMS, ids=ODOO_VENV_IDS)
