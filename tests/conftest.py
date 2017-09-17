@@ -29,9 +29,10 @@ def DirectoryChanger(d):
 
 class OdooVirtualenv:
 
-    def __init__(self, series, editable, preset_venv, cache):
+    def __init__(self, series, editable, python, preset_venv, cache):
         self.series = series
         self.editable = editable
+        self.python = python
         self.preset_venv = preset_venv
         self.cache = cache
         self.odoo_base_dir = str(cache.makedir('odoo'))
@@ -44,12 +45,7 @@ class OdooVirtualenv:
         else:
             self.tmpd = tempfile.mkdtemp()
             self.venv_dir = opj(self.tmpd, 'venv')
-            if self.series in ('8.0', '9.0', '10.0'):
-                make_venv_cmd = ['python2', '-m', 'virtualenv', self.venv_dir]
-            elif self.series in ('11.0', ):
-                make_venv_cmd = ['python3', '-m', 'virtualenv', self.venv_dir]
-            else:
-                self.raise_unsupported()
+            make_venv_cmd = [self.python, '-m', 'virtualenv', self.venv_dir]
             subprocess.check_call(make_venv_cmd)
             self.pip_install('-U', 'setuptools')
             self.pip_install_odoo()
@@ -211,40 +207,50 @@ class OdooVirtualenv:
 
 
 ODOO_VENV_PARAMS = [
-    ('11.0', False, None),
-    ('11.0', True, None),
-    ('10.0', False, None),
-    ('10.0', True, None),
-    ('9.0', False, None),
-    ('9.0', True, None),
-    ('8.0', False, None),
-    ('8.0', True, None),
+    ('11.0', '', 'python3', None),
+    ('11.0', '-e', 'python3', None),
+    ('11.0', '', 'python2', None),
+    ('11.0', '-e', 'python2', None),
+    ('10.0', '', 'python2', None),
+    ('10.0', '-e', 'python2', None),
+    ('9.0', '', 'python2', None),
+    ('9.0', '-e', 'python2', None),
+    ('8.0', '', 'python2', None),
+    ('8.0', '-e', 'python2', None),
 ]
 
 ODOO_VENV_IDS = [
-    '{}{}'.format(series, '-editable' if editable else '')
-    for series, editable, preset_venv in ODOO_VENV_PARAMS
+    '{series}{editable}-{python}'.format(**locals())
+    for series, editable, python, _ in ODOO_VENV_PARAMS
 ]
 
 # enable this to test with an existing venv where odoo and
 # odoo-autodiscover are preinstalled
-if False:
+if True:
     ODOO_VENV_PARAMS.append(
-        ('10.0', True, '/home/sbi-local/.virtualenvs/odoo-autodiscover-test')
+        ('11.0', True, 'python3',
+         '/home/sbi-local/.virtualenvs/odoo-autodiscover-test3')
     )
     ODOO_VENV_IDS.append(
-        '8.0:preset_venv'
+        '11.0:preset_venv'
+    )
+if True:
+    ODOO_VENV_PARAMS.append(
+        ('10.0', True, 'python2',
+         '/home/sbi-local/.virtualenvs/odoo-autodiscover-test')
+    )
+    ODOO_VENV_IDS.append(
+        '10.0:preset_venv'
     )
 
 
 @pytest.fixture(scope="function", params=ODOO_VENV_PARAMS, ids=ODOO_VENV_IDS)
 def odoo_venv(request):
-    series, editable, preset_venv = request.param
-    venv = OdooVirtualenv(series, editable, preset_venv, request.config.cache)
+    series, editable, python, preset_venv = request.param
+    venv = OdooVirtualenv(
+        series, editable, python, preset_venv, request.config.cache)
     try:
         venv.setUp()
-    except:
+        yield venv
+    finally:
         venv.tearDown()
-        raise
-    yield venv
-    venv.tearDown()
