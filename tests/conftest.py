@@ -5,7 +5,6 @@
 
 from __future__ import print_function
 
-import contextlib
 import os
 from os.path import join as opj
 import re
@@ -15,16 +14,6 @@ import tempfile
 from textwrap import dedent
 
 import pytest
-
-
-@contextlib.contextmanager
-def DirectoryChanger(d):
-    cwd = os.getcwd()
-    os.chdir(d)
-    try:
-        yield
-    finally:
-        os.chdir(cwd)
 
 
 class OdooVirtualenv:
