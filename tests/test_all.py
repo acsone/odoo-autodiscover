@@ -32,6 +32,7 @@ def test_odoo_auto_discover(odoo_venv):
     odoo_venv.check_addons_paths(
         editable_addons=['a1', 'z1'], not_editable_addons=[])
 
-    odoo_venv.pip_uninstall('a1', 'z1')
+    odoo_venv.pip_uninstall('a1')
+    odoo_venv.pip_uninstall('z1')
     odoo_venv.check_import_odoo()
     odoo_venv.check_addons_paths()
