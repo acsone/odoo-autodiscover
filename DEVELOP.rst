@@ -22,13 +22,11 @@ To run faster tests in a preinstalled virtualenv
 How to release
 --------------
 
-* update changelog in CHANGES.rst
+* update changelog in CHANGES.rst, referring to the next version
 * python setup.py check --restructuredtext
 * commit everything
-* git tag <version>
+* make sure tests pass!
+* git tag <version>, where <version> is PEP 440 compliant
 * git push --tags
-* python setup.py sdist bdist_wheel
-* twine upload
-* increment version (last digit + .dev)
-* add unreleased line on top of CHANGES.rst
-* git commit and push
+
+Uploading of tagged versions to pypi will be taken care of by travis.
