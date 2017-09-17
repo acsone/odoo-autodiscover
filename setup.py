@@ -22,6 +22,8 @@ setuptools.setup(
         'GNU Lesser General Public License v3 (LGPLv3)',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Framework :: Odoo',
     ],
     license='LGPLv3',
