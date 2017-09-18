@@ -1,8 +1,17 @@
 Changes
 ~~~~~~~
 
-2.0.0.beta1 (2017-09-17)
-------------------------
+.. Future (?)
+.. ----------
+.. -
+
+2.0.0 (2017-09-??)
+------------------
+- better deprecation warnings for *autodiscover scripts
+- improvements to setup.py and readme
+
+2.0.0b1 (2017-09-17)
+--------------------
 - major rewrite: instead of adapted startup scripts that monkey patch Odoo,
   use a post import hook that automatically does the job as soon as odoo or openerp
   is imported.
