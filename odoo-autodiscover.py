@@ -4,13 +4,17 @@
 # License LGPLv3 (http://www.gnu.org/licenses/lgpl-3.0-standalone.html)
 
 import imp
+import os
 import sys
-import warnings
 from distutils.spawn import find_executable
 
 
 def main():
-    warnings.warn('%s is deprecated; please run odoo normally.' % sys.argv[0])
+    sys.stderr.write('The {} script is deprecated. '
+                     'Please use the usual odoo.py. '
+                     'As long as odoo-autodiscover is installed, '
+                     'everything should just work.\n'.
+                     format(os.path.basename(sys.argv[0])))
     odoo_py = find_executable('odoo.py')
     if not odoo_py:
         sys.stderr.write('The odoo.py executable could not be found, '
