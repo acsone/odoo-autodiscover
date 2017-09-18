@@ -40,11 +40,11 @@ How to install
 How to use
 ~~~~~~~~~~
 
-* create and/or install odoo addons in the ``odoo/addons`` namespace (for Odoo 10 and 11) 
+* Create and/or install odoo addons in the ``odoo/addons`` namespace (for Odoo 10 and 11) 
   or the ``odoo_addons`` namespace (for Odoo 8 and 9),
   possibly with the help of the `setuptools-odoo
   <https://pypi.python.org/pypi/setuptools-odoo>`_ package.
-* run odoo as usual and notice the addons path is extended automatically.
+* Run odoo as usual and notice the addons path is extended automatically.
 
 Complete example
 ~~~~~~~~~~~~~~~~
@@ -53,7 +53,7 @@ The following commands install Odoo 8.0 nightly, then
 install ``base_import_async`` pulling all required dependencies
 automatically (ie ``connector``).
 
-It uses pre-built wheel packages for all OCA addons from https://wheelhouse.odoo-community.org.
+It uses pre-built wheel packages for OCA addons from pypi.
 
   .. code:: Bash
 
@@ -70,7 +70,10 @@ It uses pre-built wheel packages for all OCA addons from https://wheelhouse.odoo
     # start odoo
     openerp-server
 
-Should you like to have an Odoo 8 shell, using the OCA shell module, simply pip install the module:
+At this point, you should see in the Odoo log that the site-packages directory appears in the addons path.
+
+You can easily install additional addons. For example, should you like to have an Odoo 8 shell, 
+using the OCA shell module, simply pip install the module:
 
   .. code:: Bash
 
