@@ -18,11 +18,12 @@ import pytest
 
 class OdooVirtualenv:
 
-    def __init__(self, series, editable, python, preset_venv, cache):
+    def __init__(self, series, editable, python, preset_venv, native, cache):
         self.series = series
         self.editable = editable
         self.python = python
         self.preset_venv = preset_venv
+        self.native = native  # no need for odoo-autodiscover
         self.cache = cache
         self.odoo_base_dir = str(cache.makedir('odoo'))
         self.venv_dir = None
@@ -38,7 +39,8 @@ class OdooVirtualenv:
             subprocess.check_call(make_venv_cmd)
             self.pip_install('-U', 'setuptools')
             self.pip_install_odoo()
-            self.pip_install_odoo_autodiscover()
+            if not self.native:
+                self.pip_install_odoo_autodiscover()
 
     def tearDown(self):
         if self.tmp_dir:
@@ -96,7 +98,7 @@ class OdooVirtualenv:
         if self.series in ('8.0', '9.0', '10.0'):
             branch = self.series
         elif self.series == '11.0':
-            branch = 'master'
+            branch = 'saas-17'
         else:
             self.raise_unsupported()
         cmd = ['git', 'clone', '--depth=1', '-b', branch, url, self.odoo_dir]
@@ -189,16 +191,18 @@ class OdooVirtualenv:
 
 
 ODOO_VENV_PARAMS = [
-    ('11.0', False, 'python3', None),
-    ('11.0', True, 'python3', None),
-    ('11.0', False, 'python2', None),
-    ('11.0', True, 'python2', None),
-    ('10.0', False, 'python2', None),
-    ('10.0', True, 'python2', None),
-    ('9.0', False, 'python2', None),
-    ('9.0', True, 'python2', None),
-    ('8.0', False, 'python2', None),
-    ('8.0', True, 'python2', None),
+    ('11.0', False, 'python3', None, True),
+    ('11.0', True, 'python3', None, True),
+    ('11.0', False, 'python3', None, False),
+    ('11.0', True, 'python3', None, False),
+    ('11.0', False, 'python2', None, False),
+    ('11.0', True, 'python2', None, False),
+    ('10.0', False, 'python2', None, False),
+    ('10.0', True, 'python2', None, False),
+    ('9.0', False, 'python2', None, False),
+    ('9.0', True, 'python2', None, False),
+    ('8.0', False, 'python2', None, False),
+    ('8.0', True, 'python2', None, False),
 ]
 
 
@@ -216,7 +220,7 @@ def _add_param_from_environ():
         raise RuntimeError("Odoo not installed in {}?".format(preset_venv))
     series = mo.group(1)
     editable = (mo.group(2) != ')')
-    ODOO_VENV_PARAMS.append((series, editable, None, preset_venv))
+    ODOO_VENV_PARAMS.append((series, editable, None, preset_venv, None))
 
 
 _add_param_from_environ()
@@ -224,7 +228,7 @@ _add_param_from_environ()
 
 def _make_odoo_venv_ids():
     venv_ids = []
-    for series, editable, python, preset_venv in ODOO_VENV_PARAMS:
+    for series, editable, python, preset_venv, native in ODOO_VENV_PARAMS:
         if preset_venv:
             venv_ids.append('{series}-preset'.format(**locals()))
         else:
@@ -232,7 +236,12 @@ def _make_odoo_venv_ids():
                 editable = '-editable'
             else:
                 editable = ''
-            venv_ids.append('{series}{editable}-{python}'.format(**locals()))
+            if native:
+                native = '-native'
+            else:
+                native = ''
+            venv_ids.append(
+                '{series}{editable}-{python}{native}'.format(**locals()))
     return venv_ids
 
 
@@ -241,9 +250,10 @@ ODOO_VENV_IDS = _make_odoo_venv_ids()
 
 @pytest.fixture(scope="function", params=ODOO_VENV_PARAMS, ids=ODOO_VENV_IDS)
 def odoo_venv(request):
-    series, editable, python, preset_venv = request.param
+    series, editable, python, preset_venv, native = request.param
     venv = OdooVirtualenv(
-        series, editable, python, preset_venv, request.config.cache)
+        series, editable, python, preset_venv,
+        native, request.config.cache)
     try:
         venv.setUp()
         yield venv

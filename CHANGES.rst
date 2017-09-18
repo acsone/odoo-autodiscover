@@ -7,8 +7,9 @@ Changes
 
 2.0.0 (2017-09-??)
 ------------------
-- better deprecation warnings for *autodiscover scripts
+- better deprecation warnings for autodiscover scripts
 - improvements to setup.py and readme
+- add test for Odoo 11 and python 3 where odoo-autodiscover is not necessary
 
 2.0.0b1 (2017-09-17)
 --------------------
