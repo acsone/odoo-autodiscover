@@ -15,7 +15,9 @@ deploy:
   user: acsbidoul
   password:
     secure: "eVofHUAKl2ZccFVMRDjH5plyfYpMwtHcSQwkJPb63W5KZfLVGgo/Wjmsd1111oPe2TaKZG7EnK0U19A8OPsEoWZr7rxUDo5rM90S+XJBKZ3iuHlJxJ3yF5bRtYJ3GLcDVMTNvTpetNzs+AIb/YQ/nhzs+dU+l28GRIR3JJf3vfJ76IJ+lJlZ3DxW+2u3TUO70nXyT4gvZByoo6S9XyQNgRJSov9Furzvv3z9WDXYOIQM9p0uNBpD2rHkBIZYZ2xdkkUqOCRCjuB1VElFieccBzIorKpe+ibjBrOlMvSXFi3wNNd8ZVlEcfaDu6bJLz1GF2fyDid+B0BeNDm1cRibTzklHTgGFWDmsgzA+jeCbVwctETJ/erb1kp/Ao2o0NKr0QW6q+aAWCxqr6Zu8/EdWQyCT1mGw7UQ12hAFQQ8B6hgTytiFyX9P/voymtG7s360ZjJJ6NYYlt09c1vGAljgxvaW4iSEvTEh/BgBzEyHwVhAitgdVoRWI/BO2KbzNDJKQHYUhSOEbw9QfNokfFDYV5H9Rec9HMOT3mLr38jY4SHSADtx5M5+yE4pXRqNjn7eLQqCvzy2AVv9caNgwvmtrv+bNXSUvsPnWe/VS9I2j/H1POHiBUSCH12B0d0iwtNUsBj9FSP3O5fkvZ4dFwW//T+QOpRiTEanu5Ar5MjWWw="
-  distributions: "sdist bdist_wheel"
+  # do NOT distribute wheel, as the location of zzz_odoo_autodiscover.pth 
+  # must be evaluated depending on the exact python version
+  distributions: "sdist"
   skip_upload_docs: true
   on:
     repo: acsone/odoo-autodiscover
