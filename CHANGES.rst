@@ -5,7 +5,7 @@ Changes
 .. ----------
 .. -
 
-2.0.0 (2017-09-??)
+2.0.0 (2017-09-19)
 ------------------
 - better deprecation warnings for autodiscover scripts
 - improvements to setup.py and readme
