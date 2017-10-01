@@ -98,7 +98,7 @@ class OdooVirtualenv:
         if self.series in ('8.0', '9.0', '10.0'):
             branch = self.series
         elif self.series == '11.0':
-            branch = 'saas-17'
+            branch = 'saas-18'
         else:
             self.raise_unsupported()
         cmd = ['git', 'clone', '--depth=1', '-b', branch, url, self.odoo_dir]
