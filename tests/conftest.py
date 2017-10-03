@@ -95,10 +95,8 @@ class OdooVirtualenv:
         if os.path.exists(self.odoo_dir):
             return
         url = 'https://github.com/odoo/odoo.git'
-        if self.series in ('8.0', '9.0', '10.0'):
+        if self.series in ('8.0', '9.0', '10.0', '11.0'):
             branch = self.series
-        elif self.series == '11.0':
-            branch = 'saas-18'
         else:
             self.raise_unsupported()
         cmd = ['git', 'clone', '--depth=1', '-b', branch, url, self.odoo_dir]
@@ -191,6 +189,7 @@ class OdooVirtualenv:
 
 
 ODOO_VENV_PARAMS = [
+    # series, editable, python, preset venv, native
     ('11.0', False, 'python3', None, True),
     ('11.0', True, 'python3', None, True),
     ('11.0', False, 'python3', None, False),
