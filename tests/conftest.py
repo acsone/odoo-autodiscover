@@ -108,10 +108,10 @@ class OdooVirtualenv:
         else:
             self.raise_unsupported()
         cmd = ['git', 'clone', '--depth=1', '-b', branch, url, self.odoo_dir]
+        subprocess.check_call(cmd)
         # a small hack to allow installing Odoo 11 on python2
         if self.series == '11.0' and self.python == 'python2':
             self.allow_python2_with_odoo11()
-        subprocess.check_call(cmd)
 
     def pip_install_odoo(self):
         self.download_odoo()
