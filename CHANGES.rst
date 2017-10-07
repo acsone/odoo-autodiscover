@@ -5,6 +5,12 @@ Changes
 .. ----------
 .. -
 
+2.0.1 (unreleased)
+------------------
+
+- fix test of Odoo 11 with python 2 by removing python_requires
+  from Odoo's setup.py 
+
 2.0.0 (2017-09-19)
 ------------------
 - better deprecation warnings for autodiscover scripts

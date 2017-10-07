@@ -91,7 +91,7 @@ class OdooVirtualenv:
         ]
         self.pip_install(*args)
 
-    def allow_python2_with_odoo11(self):
+    def fix_odoo11_for_python2(self):
         setup_py_file = opj(self.odoo_dir, 'setup.py')
         with open(setup_py_file, 'r') as f:
             setup_py = f.read()
@@ -109,12 +109,12 @@ class OdooVirtualenv:
             self.raise_unsupported()
         cmd = ['git', 'clone', '--depth=1', '-b', branch, url, self.odoo_dir]
         subprocess.check_call(cmd)
-        # a small hack to allow installing Odoo 11 on python2
-        if self.series == '11.0' and self.python == 'python2':
-            self.allow_python2_with_odoo11()
 
     def pip_install_odoo(self):
         self.download_odoo()
+        # a small hack to allow installing Odoo 11 on python2
+        if self.series == '11.0' and self.python == 'python2':
+            self.fix_odoo11_for_python2()
         self.pip_install_odoo_dependencies()
         if self.editable:
             self.pip_install('-e', self.odoo_dir)
