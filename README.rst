@@ -19,7 +19,7 @@ works by looking for ``odoo/addons`` directories in PYTHONPATH.
 **Note it is not necessary to install this package for Odoo 11 and later**.
 
 Addons that install this way can be packaged with the help of
-`setuptools-odoo <https://pypi.python.org/pypi/setuptools-odoo>`_.
+`setuptools-odoo <https://pypi.python.org/pypi/setuptools-odoo>`__.
 
 How to install
 ~~~~~~~~~~~~~~
@@ -45,7 +45,7 @@ How to use
 * Create and/or install odoo addons in the ``odoo/addons`` namespace (for Odoo 10 and later) 
   or the ``odoo_addons`` namespace (for Odoo 8 and 9),
   possibly with the help of the `setuptools-odoo
-  <https://pypi.python.org/pypi/setuptools-odoo>`_ package.
+  <https://pypi.python.org/pypi/setuptools-odoo>`__ package.
 * Run odoo as usual and notice the addons path is extended automatically.
 
 Complete example
