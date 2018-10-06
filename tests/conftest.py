@@ -57,7 +57,7 @@ class OdooVirtualenv:
     def odoo_bin(self):
         if self.series in ('8.0', '9.0'):
             return opj(self.venv_dir, 'bin', 'openerp-server')
-        elif self.series in ('10.0', '11.0'):
+        elif self.series in ('10.0', '11.0', '12.0'):
             return opj(self.venv_dir, 'bin', 'odoo')
         else:
             self.raise_unsupported()
@@ -103,7 +103,7 @@ class OdooVirtualenv:
         if os.path.exists(self.odoo_dir):
             return
         url = 'https://github.com/odoo/odoo.git'
-        if self.series in ('8.0', '9.0', '10.0', '11.0'):
+        if self.series in ('8.0', '9.0', '10.0', '11.0', '12.0'):
             branch = self.series
         else:
             self.raise_unsupported()
@@ -125,7 +125,7 @@ class OdooVirtualenv:
         if self.series in ('8.0', '9.0'):
             subprocess.check_call(
                 [self.python_bin, '-c', 'from openerp import api'])
-        elif self.series in ('10.0', '11.0'):
+        elif self.series in ('10.0', '11.0', '12.0'):
             subprocess.check_call(
                 [self.python_bin, '-c', 'from odoo import api'])
         else:
@@ -177,7 +177,7 @@ class OdooVirtualenv:
     def _has_addon_dir(self, addons_paths, addon_name):
         if self.series in ('8.0', '9.0'):
             nspkg = 'odoo_addons'
-        elif self.series in ('10.0', '11.0'):
+        elif self.series in ('10.0', '11.0', '12.0'):
             nspkg = opj('odoo', 'addons')
         else:
             self.raise_unsupported()
@@ -201,6 +201,8 @@ class OdooVirtualenv:
 
 ODOO_VENV_PARAMS = [
     # series, editable, python, preset venv, native
+    ('12.0', False, 'python3', None, True),
+    ('12.0', True, 'python3', None, True),
     ('11.0', False, 'python3', None, True),
     ('11.0', True, 'python3', None, True),
     ('11.0', False, 'python3', None, False),
