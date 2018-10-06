@@ -13,8 +13,10 @@ Enhance Odoo to automatically discover available addons without the need of
 the ``--addons-path`` option.
 
 For Odoo 8 and 9, it works by looking at addons in the 
-``odoo_addons`` namespace package. For Odoo 10 and 11, it
+``odoo_addons`` namespace package. For Odoo 10 and later, it
 works by looking for ``odoo/addons`` directories in PYTHONPATH.
+
+**Note it is not necessary to install this package for Odoo 11 and later**.
 
 Addons that install this way can be packaged with the help of
 `setuptools-odoo <https://pypi.python.org/pypi/setuptools-odoo>`_.
@@ -32,7 +34,7 @@ How to install
   * ``pip list`` must show ``odoo``.
   * for Odoo 8 and 9, running ``python -c "import openerp.api"`` 
     and ``openerp-server`` must work
-  * for Odoo 10 and 11, running ``python -c "import odoo.api"`` 
+  * for Odoo 10 and later, running ``python -c "import odoo.api"`` 
     and ``odoo`` must work 
 
 * Install this package (``pip install odoo-autodiscover``).
@@ -40,7 +42,7 @@ How to install
 How to use
 ~~~~~~~~~~
 
-* Create and/or install odoo addons in the ``odoo/addons`` namespace (for Odoo 10 and 11) 
+* Create and/or install odoo addons in the ``odoo/addons`` namespace (for Odoo 10 and later) 
   or the ``odoo_addons`` namespace (for Odoo 8 and 9),
   possibly with the help of the `setuptools-odoo
   <https://pypi.python.org/pypi/setuptools-odoo>`_ package.
